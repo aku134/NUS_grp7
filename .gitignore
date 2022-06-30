@@ -1,0 +1,6 @@
+parkDetect/__pycache__/
+parkDetect/models/
+parkDetect/upload.jpg
+parkDetect/uploads/
+ml/.ipynb_checkpoints/
+ml/spiral_processed/

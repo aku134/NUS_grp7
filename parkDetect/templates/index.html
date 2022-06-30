@@ -180,7 +180,7 @@
 
     <section id="press">
 
-      <img class="press-logo" src="{{url_for('static', filename='images/techcrunch.png')}}" alt="tc-logo">
+      <img class="press-logo" src="{{url_for('static', filename='images/TechCrunch.png')}}" alt="tc-logo">
       <img class="press-logo" src="{{url_for('static', filename='images/tnw.png')}}" alt="tnw-logo">
       <img class="press-logo" src="{{url_for('static', filename='images/bizinsider.png')}}" alt="biz-insider-logo">
       <img class="press-logo" src="{{url_for('static', filename='images/mashable.png')}}" alt="mashable-logo">
@@ -193,7 +193,7 @@
     <section id="diagnosis">
 
 
-      <h2>Take these 2 tests for Parkinsons Disease diagnosis.</h2>
+      <h2>Take the Spiral Test for Parkinsons Disease diagnosis.</h2>
       <p>Get quick and accurate results for your better future.</p>
 
 
@@ -201,9 +201,9 @@
 
         <div class="pricing-col col-lg-4 col-md-6">
 
-          <div class="card">
+          
 
-            <div class="card-header">
+            <!--<div class="card-header">
 
               <h3>Speech Analysis</h3>
 
@@ -217,11 +217,11 @@
               <button type="button" class="diagbtn btn btn-secondary btn-sm">Upload</button>
               <button type="button" class="diagbtn btn btn-md btn-block btn-outline-dark">Results</button>
 
-            </div>
-          </div>
+            </div>-->
+          
         </div>
 
-        <script>
+        <!-- <script>
           navigator
             .mediaDevices
             .getUserMedia({
@@ -277,7 +277,7 @@
           };
         </script>
 
-
+ --> 
 
 
         <div class="pricing-col col-lg-4">
@@ -299,11 +299,11 @@
               </form>
 
               <form action="/uploader" method="POST" enctype="multipart/form-data">
-                <input type="file" name="file1" class="diagbtn btn btn-secondary btn-sm" />
+                <input type="file" accept="image/*" class="custom-file-input" name="image" id="image" oninput="filesize(this);">
                 <input type="submit" />
               </form>
 
-              <button type="button" class="diagbtn btn btn-md btn-block btn-outline-dark">Results</button>
+              <!-- <button type="button" class="diagbtn btn btn-md btn-block btn-outline-dark">Results</button> -->
 
             </div>
           </div>

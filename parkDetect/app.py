@@ -3,44 +3,22 @@ import sys
 import os
 import uuid
 from flask import Flask, render_template, flash, request, redirect,session
-
+from preprocess import process_image
+import tensorflow as tf
+import numpy as np
+import cv2
 
 from werkzeug.utils import secure_filename
 app = Flask(__name__)
 
 
-UPLOAD_FOLDER = 'uploads'
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+
+# ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
-@app.route('/', methods = ['POST'])
-def upload_image():
-        if 'file' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['file']
-        if file.filename == '':
-            flash('No image selected for uploading')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            #print('upload_image filename: ' + filename)
-            flash('Image successfully uploaded and displayed below')
-            return render_template('index.html', filename=filename)
-        else:
-            flash('Allowed image types are - png, jpg, jpeg, gif')
-            return redirect(request.url)
-
-
-
-
+app.config["IMAGE_UPLOADS"] = "./uploads"
 
 @app.route("/")
 def index():
@@ -57,9 +35,30 @@ def draw():
 @app.route('/uploader', methods = ['GET', 'POST'])
 def upload_file():
    if request.method == 'POST':
-      f = request.files['file']
-      f.save(secure_filename(f.filename))
-      return 'file uploaded successfully'
+    if request.files:
+      img = request.files['image']
+      image_url=os.path.join(app.config["IMAGE_UPLOADS"],img.filename)
+      img.save(image_url)
+      img = process_image(image_url)
+      cv2.imwrite('upload.jpg',img)
+
+      img = cv2.imread('upload.jpg')
+      resize = tf.image.resize(img, (256,256))
+      
+      json_file = open('models/model_structure.json','r')
+      model_structure = json_file.read()
+      json_file.close()
+      model = tf.keras.models.model_from_json(model_structure)
+      model.load_weights('models/model_weights.h5')
+      pred = model.predict(np.expand_dims(resize/255, 0))
+      p=str(pred)
+      print(p)
+
+    #   print(result)
+    #   image_path = "uploads/" + img.filename
+      return render_template("index.html")
+   
+   return render_template("index.html")
 
 
 if __name__ == "__main__":
